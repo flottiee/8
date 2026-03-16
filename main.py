@@ -43,9 +43,13 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
+            surname=form.surname.data,
             name=form.name.data,
+            age=form.age.data,
+            position=form.position.data,
+            speciality=form.speciality.data,
+            address=form.address.data,
             email=form.email.data,
-            about=form.about.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -158,8 +162,8 @@ def seed_db():
 
 def main():
     db_session.global_init("db/mars_explorer.db")
-    seed_db()
     app.run(debug=True)
+    seed_db()
         
 
 if __name__ == '__main__':
