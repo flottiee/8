@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <button><a class="btn btn-primary " href="/add_job">Добавить работу</a></button>
+    <a class="navbar-brand" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
+    <table>
+        <thead>
+            <th>Название работы</th>
+            <th>Лидер</th>
+            <th>Длительность</th>
+            <th>Сотрудники</th>
+            <th>Начало работы</th>
+            <th>Конец работы</th>
+            <th>Закончена</th>
+        </thead>
+        {% for job in jobs %}
+        <tbody>
+            <tr>
+                <td>{{ job.job }}</td> 
+                <td>{{ job.team_leader }}</td>
+                <td>{{ job.work_size }}</td>
+                <td>{{ job.collaborators }}</td>
+                <td>{{ job.start_date }}</td>
+                <td>{{ job.end_date }}</td>
+                <td>{% if job.is_finished %}<span style="color: green;">Да</span>{% else %}<span style="color: red;">Нет</span>{% endif %}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+{% else %}
+    <p>
+        <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+        <a class="btn btn-success" href="/login">Войти</a>
+    </p>
+{% endif %}
+
+{% endblock %}
