@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template
+from flask import jsonify, make_response
 from flask_login import LoginManager, login_user, logout_user
 from data.login_form import LoginForm
 from data.job_form import AddJobForm
@@ -9,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
-
+#api
+from data import jobs_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -159,10 +161,18 @@ def seed_db():
         ))
     session.commit()
 
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+@app.errorhandler(400)
+def bad_request(error): 
+    return make_response(jsonify({'error': 'Bad request'}), 400)
 
 def main():
     db_session.global_init("db/mars_explorer.db")
-    app.run(debug=True)
+    app.register_blueprint(jobs_api.blueprint)
+    app.run()
     seed_db()
         
 
